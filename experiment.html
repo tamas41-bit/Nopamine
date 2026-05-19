@@ -65,8 +65,8 @@
       background: var(--card); border: 1px solid var(--border); border-radius: 1rem; padding: 2rem;
     }
 
-    #phaseGo, #phaseResult { display: none; }
-    #phaseReady { display: flex; }
+    #phaseReady, #phaseResult { display: none; }
+    #phaseGo { display: flex; }
 
     .section-label {
       font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
@@ -184,8 +184,17 @@
           🔄 다시 실험하기
         </button>
       </div>
+      <div style="margin-top:2rem;padding:1.25rem 1.5rem;background:var(--surface);border:1px solid var(--border);
+                  border-radius:1rem;max-width:26rem;text-align:center;">
+        <p style="font-weight:800;font-size:.95rem;color:var(--text);margin-bottom:.5rem;">도파민 자극 실험</p>
+        <p style="color:var(--muted);font-size:.8rem;line-height:1.75;">
+          이 실험은 <strong style="color:var(--text);">당신이 직접 체감</strong>하는 것이 목적입니다.<br>
+          영상 시청 후 돌아오면 얼마나 시간이 흘렀는지 확인할 수 있습니다.
+        </p>
+      </div>
+
       <a href="test.html"
-         style="margin-top:1rem;color:var(--dim);font-size:.72rem;display:block;text-decoration:underline;transition:color .2s;"
+         style="margin-top:1.25rem;color:var(--dim);font-size:.72rem;display:block;text-decoration:underline;transition:color .2s;"
          onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--dim)'">
         도파민 중독 테스트도 해보기
       </a>
@@ -243,6 +252,10 @@
       if (sec < 1800) return { emoji:'😰', msg:'30분 이상!',   desc:'30분 이상이 사라졌습니다. 이것이 반복되면 하루에 수 시간이 증발합니다.', color:'var(--rose)' };
       return                  { emoji:'🚨', msg:'1시간 이상!!', desc:'1시간 이상이 흘렀습니다. 심각한 도파민 과의존 상태입니다. 지금 당장 디톡스를 시작하세요.', color:'var(--rose)' };
     }
+
+    // 페이지 로드 시 바로 타이머 시작
+    elapsed = 0;
+    startTimer();
 
     startBtn.addEventListener('click', () => {
       elapsed = 0;
