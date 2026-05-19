@@ -88,6 +88,12 @@
     /* ── DARK CTA SECTION ── */
     .section-dark { background: #0f0f0f; }
 
+    /* ── BOUNCE ARROW ── */
+    @keyframes bounce {
+      from { transform: translateX(-50%) translateY(0); }
+      to   { transform: translateX(-50%) translateY(8px); }
+    }
+
     /* ── SECTION LABEL ── */
     .section-label {
       font-size: .68rem; font-weight: 700; letter-spacing: .14em;
@@ -103,9 +109,16 @@
       opacity: 0;
       animation: heroFadeUp .75s cubic-bezier(.22,.68,0,1.1) .1s forwards;
     }
+
+    /* ── STATS SCROLL ANIMATION ── */
     .hero-right {
       opacity: 0;
-      animation: heroFadeUp .75s cubic-bezier(.22,.68,0,1.1) .55s forwards;
+      transform: translateY(32px);
+      transition: opacity .7s cubic-bezier(.22,.68,0,1.1), transform .7s cubic-bezier(.22,.68,0,1.1);
+    }
+    .hero-right.in-view {
+      opacity: 1;
+      transform: translateY(0);
     }
   </style>
 </head>
@@ -141,66 +154,71 @@
     </div>
   </nav>
 
-  <!-- ── HERO ── -->
+  <!-- ── HERO (왼쪽 콘텐츠, 첫 화면) ── -->
   <section class="hero-bg overflow-hidden" style="min-height:100vh;padding-top:60px;">
-    <div class="max-w-6xl mx-auto px-5 flex items-center" style="min-height:calc(100vh - 60px);padding-top:3rem;padding-bottom:4rem;">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center w-full">
-
-        <!-- Left: copy -->
-        <div class="hero-left">
-          <div class="badge-warn mb-8">
-            <span class="dot-pulse"></span>
-            경고 — 당신의 눈이 지금 망가지고 있습니다
-          </div>
-          <h1 style="font-size:clamp(2.4rem,5.5vw,3.8rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;color:#0f0f0f;"
-              class="mb-6">
-            지금 영상 보면서<br>
-            눈 초점 <span class="eye-flicker" style="color:#c4c0bb;">풀리신</span> 분들,<br>
-            <span style="color:var(--rose);">당장 멈추세요.</span>
-          </h1>
-          <p style="color:var(--muted);font-size:1rem;line-height:1.85;max-width:26rem;" class="mb-8">
-            숏폼 중독은 단순한 나쁜 습관이 아닙니다.<br>
-            <strong style="color:var(--text);">도파민 과잉 자극</strong>이 시력을
-            <em style="color:var(--rose);font-style:normal;">실제로</em> 파괴하고 있습니다.
-          </p>
-          <div class="flex flex-wrap gap-3 mb-5">
-            <a href="test.html" class="btn-primary">
-              무료 진단하기
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5-5 5M6 12h12"/>
-              </svg>
-            </a>
-            <a href="experiment.html" class="btn-ghost">도파민 자극 체험</a>
-          </div>
-          <p style="color:var(--dim);font-size:.72rem;">회원가입 불필요 · 완전 무료</p>
+    <div class="max-w-6xl mx-auto px-5 flex items-center justify-center md:justify-start" style="min-height:calc(100vh - 60px);padding-top:3rem;padding-bottom:4rem;">
+      <div class="hero-left" style="max-width:34rem;">
+        <div class="badge-warn mb-8">
+          <span class="dot-pulse"></span>
+          경고 — 당신의 눈이 지금 망가지고 있습니다
         </div>
+        <h1 style="font-size:clamp(2.4rem,5.5vw,3.8rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;color:#0f0f0f;"
+            class="mb-6">
+          지금 영상 보면서<br>
+          눈 초점 <span class="eye-flicker" style="color:#c4c0bb;">풀리신</span> 분들,<br>
+          <span style="color:var(--rose);">당장 멈추세요.</span>
+        </h1>
+        <p style="color:var(--muted);font-size:1rem;line-height:1.85;max-width:26rem;" class="mb-8">
+          숏폼 중독은 단순한 나쁜 습관이 아닙니다.<br>
+          <strong style="color:var(--text);">도파민 과잉 자극</strong>이 시력을
+          <em style="color:var(--rose);font-style:normal;">실제로</em> 파괴하고 있습니다.
+        </p>
+        <div class="flex flex-wrap gap-3 mb-5">
+          <a href="test.html" class="btn-primary">
+            무료 진단하기
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5-5 5M6 12h12"/>
+            </svg>
+          </a>
+          <a href="experiment.html" class="btn-ghost">도파민 자극 체험</a>
+        </div>
+        <p style="color:var(--dim);font-size:.72rem;">회원가입 불필요 · 완전 무료</p>
+      </div>
+    </div>
+    <!-- 스크롤 유도 화살표 -->
+    <div style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);animation:bounce .8s ease-in-out infinite alternate;">
+      <svg width="24" height="24" fill="none" stroke="#9ca3af" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </div>
+  </section>
 
-        <!-- Right: stat glass cards -->
-        <div class="hidden md:flex flex-col gap-4 hero-right">
-          <div class="stat-glass" style="padding:1.75rem 2rem;">
-            <div style="font-size:3.4rem;font-weight:900;line-height:1;letter-spacing:-.03em;color:var(--rose);">87%</div>
-            <div style="font-weight:700;margin:.5rem 0 .3rem;color:var(--text);font-size:.9rem;">숏폼 과의존자 비율</div>
-            <div style="color:var(--dim);font-size:.78rem;line-height:1.65;">하루 2시간 이상 숏폼을 시청하는 스마트폰 사용자 비율</div>
+  <!-- ── STATS (오른쪽 콘텐츠, 스크롤 후 등장) ── -->
+  <section class="hero-bg" style="padding:6rem 1.25rem 7rem;">
+    <div class="max-w-xl mx-auto">
+      <div class="flex flex-col gap-4 hero-right">
+        <div class="stat-glass" style="padding:1.75rem 2rem;">
+          <div style="font-size:3.4rem;font-weight:900;line-height:1;letter-spacing:-.03em;color:var(--rose);">87%</div>
+          <div style="font-weight:700;margin:.5rem 0 .3rem;color:var(--text);font-size:.9rem;">숏폼 과의존자 비율</div>
+          <div style="color:var(--dim);font-size:.78rem;line-height:1.65;">하루 2시간 이상 숏폼을 시청하는 스마트폰 사용자 비율</div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="stat-glass" style="padding:1.5rem;">
+            <div style="font-size:2.6rem;font-weight:900;line-height:1;color:var(--amber);">2.4×</div>
+            <div style="font-size:.8rem;font-weight:700;color:var(--text);margin:.4rem 0 .2rem;">근시 악화 속도</div>
+            <div style="font-size:.72rem;color:var(--dim);">일반인 대비</div>
           </div>
-          <div class="grid grid-cols-2 gap-4">
-            <div class="stat-glass" style="padding:1.5rem;">
-              <div style="font-size:2.6rem;font-weight:900;line-height:1;color:var(--amber);">2.4×</div>
-              <div style="font-size:.8rem;font-weight:700;color:var(--text);margin:.4rem 0 .2rem;">근시 악화 속도</div>
-              <div style="font-size:.72rem;color:var(--dim);">일반인 대비</div>
-            </div>
-            <div class="stat-glass" style="padding:1.5rem;">
-              <div style="font-size:2.6rem;font-weight:900;line-height:1;color:var(--accent);">21일</div>
-              <div style="font-size:.8rem;font-weight:700;color:var(--text);margin:.4rem 0 .2rem;">디톡스 기간</div>
-              <div style="font-size:.72rem;color:var(--dim);">최소 회복까지</div>
-            </div>
-          </div>
-          <div class="stat-glass" style="padding:1rem 1.4rem;display:flex;align-items:center;gap:.6rem;">
-            <div style="width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;animation:dotPulse 2s ease infinite;"></div>
-            <span style="color:var(--muted);font-size:.78rem;">한국 성인 평균 숏폼 시청 시간</span>
-            <span style="color:var(--amber);font-weight:800;font-size:.88rem;margin-left:auto;">3시간 12분/일</span>
+          <div class="stat-glass" style="padding:1.5rem;">
+            <div style="font-size:2.6rem;font-weight:900;line-height:1;color:var(--accent);">21일</div>
+            <div style="font-size:.8rem;font-weight:700;color:var(--text);margin:.4rem 0 .2rem;">디톡스 기간</div>
+            <div style="font-size:.72rem;color:var(--dim);">최소 회복까지</div>
           </div>
         </div>
-
+        <div class="stat-glass" style="padding:1rem 1.4rem;display:flex;align-items:center;gap:.6rem;">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;animation:dotPulse 2s ease infinite;"></div>
+          <span style="color:var(--muted);font-size:.78rem;">한국 성인 평균 숏폼 시청 시간</span>
+          <span style="color:var(--amber);font-weight:800;font-size:.88rem;margin-left:auto;">3시간 12분/일</span>
+        </div>
       </div>
     </div>
   </section>
@@ -341,6 +359,18 @@
     const mBtn = document.getElementById('mBtn');
     const mMenu = document.getElementById('mMenu');
     mBtn.addEventListener('click', () => mMenu.classList.toggle('hidden'));
+
+    // 통계 카드 스크롤 트리거
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(el => {
+        if (el.isIntersecting) {
+          el.target.classList.add('in-view');
+          observer.unobserve(el.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.hero-right').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
