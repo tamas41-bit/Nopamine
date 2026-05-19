@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>도파민 자극 실험 | Nopamine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg:       #f8f7f5;
+      --surface:  #f0ede9;
+      --card:     #ffffff;
+      --border:   #e0dbd3;
+      --accent:   #3d7a52;
+      --accent-h: #2d6a42;
+      --accent-bg:#edf5f1;
+      --amber:    #9a7530;
+      --amber-bg: #fdf5e6;
+      --rose:     #b85a52;
+      --rose-bg:  #fdf0ee;
+      --text:     #1c1a17;
+      --muted:    #7a7168;
+      --dim:      #aaa098;
+    }
+    body { background: var(--bg); color: var(--text); }
+    .logo { color: var(--accent); font-weight: 900; letter-spacing: .12em; }
+
+    .clock {
+      font-family: 'Courier New', 'Consolas', monospace;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .04em;
+    }
+    .clock-large {
+      font-size: clamp(3rem, 12vw, 6.5rem);
+      font-weight: 900;
+      color: var(--text);
+    }
+    .clock-cs {
+      font-size: clamp(1.4rem, 4.5vw, 2.8rem);
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .clock-sep { color: var(--dim); }
+
+    .pulse-ring { animation: pulseRing 3s ease-in-out infinite; }
+    @keyframes pulseRing {
+      0%,100% { box-shadow: 0 0 0 0 rgba(154,117,48,.25); }
+      50%      { box-shadow: 0 0 0 16px rgba(154,117,48,0); }
+    }
+
+    .btn-stop {
+      background: var(--card); border: 1px solid var(--border); color: var(--muted);
+      transition: all .2s; border-radius: .75rem; font-weight: 600; font-size: .875rem;
+    }
+    .btn-stop:hover { border-color: var(--muted); color: var(--text); }
+    .btn-stop.running { background: var(--rose-bg); border-color: #d4908a; color: var(--rose); }
+    .btn-stop.running:hover { background: #fae4e2; }
+    .btn-stop.stopped { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+    .btn-stop.stopped:hover { background: #d8eee3; }
+
+    .overlay-fade { animation: fadeIn .4s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+    .instruction-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 1rem; padding: 2rem;
+    }
+
+    #phaseGo, #phaseResult { display: none; }
+    #phaseReady { display: flex; }
+
+    .section-label {
+      font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: .5rem;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- NAV -->
+  <nav style="background:rgba(248,247,245,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);"
+       class="fixed top-0 w-full z-50">
+    <div class="max-w-4xl mx-auto px-5 h-14 flex items-center justify-between">
+      <a href="index.html" class="select-none"><img src="logo.png" alt="Nopamine" style="height:38px;width:auto;display:block;"></a>
+      <span style="color:var(--muted);font-size:.8rem;">도파민 자극 실험</span>
+    </div>
+  </nav>
+
+  <main class="flex-1 flex flex-col items-center justify-center px-4 pt-14">
+
+    <!-- ── PHASE 1: READY ── -->
+    <div id="phaseReady" class="flex-col items-center text-center max-w-xl w-full py-16">
+      <div class="pulse-ring w-16 h-16 rounded-full flex items-center justify-center text-3xl mb-8 mx-auto"
+           style="background:var(--amber-bg);border:1px solid #d4b080;">⚡</div>
+      <h1 style="font-size:1.9rem;font-weight:900;letter-spacing:-.02em;margin-bottom:.75rem;">도파민 자극 실험</h1>
+      <p style="color:var(--muted);font-size:.95rem;line-height:1.75;margin-bottom:2rem;">
+        이 실험은 <strong style="color:var(--text);">당신이 직접 체감</strong>하는 것이 목적입니다.<br>
+        영상 시청 후 돌아오면 얼마나 시간이 흘렀는지 확인할 수 있습니다.
+      </p>
+
+      <div class="instruction-card mb-8 text-left">
+        <p style="color:var(--amber);font-size:.78rem;font-weight:700;margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.06em;">실험 방법</p>
+        <ol style="color:var(--muted);font-size:.875rem;line-height:1.75;" class="space-y-1.5 list-decimal list-inside">
+          <li>'실험 시작' 버튼을 누르면 타이머가 자동으로 작동합니다.</li>
+          <li>유튜브, 인스타그램 등 쇼츠 영상이 있는 곳에 들어가세요.</li>
+          <li>가장 흥미로운 영상을 하나 보고 이 페이지로 돌아오세요.</li>
+          <li>타이머를 정지하고 소비된 시간을 직접 확인하세요.</li>
+        </ol>
+      </div>
+
+      <button id="startBtn"
+              style="display:inline-flex;align-items:center;gap:.6rem;background:var(--amber);color:#ffffff;
+                     font-weight:700;font-size:1rem;padding:.9rem 2.2rem;border-radius:999px;border:none;cursor:pointer;
+                     transition:opacity .18s;">
+        ⚡ 실험 시작하기
+      </button>
+      <p style="color:var(--dim);font-size:.72rem;margin-top:.75rem;">버튼을 누르는 순간 타이머가 0초부터 시작됩니다</p>
+    </div>
+
+    <!-- ── PHASE 2: GO ── -->
+    <div id="phaseGo" class="flex-col items-center text-center max-w-2xl w-full py-10">
+
+      <div class="instruction-card mb-10 w-full">
+        <p class="section-label">지금 당장 해야 할 것</p>
+        <p style="font-size:clamp(1.2rem,4vw,1.8rem);font-weight:900;color:var(--text);line-height:1.45;">
+          지금 바로 유튜브나 인스타 등<br>
+          <span style="color:var(--amber);">쇼츠 영상이 있는 곳</span>에 들어가<br>
+          가장 흥미있는 영상을 <span style="color:var(--amber);">하나 보고</span><br>
+          이 페이지로 돌아오세요.
+        </p>
+      </div>
+
+      <!-- Stopwatch -->
+      <div class="mb-6">
+        <p class="section-label">경과 시간</p>
+        <div class="clock flex items-baseline justify-center gap-1">
+          <span id="clockH"  class="clock-large hidden">00</span>
+          <span id="colonH"  class="clock-large clock-sep hidden">:</span>
+          <span id="clockM"  class="clock-large">00</span>
+          <span class="clock-large clock-sep">:</span>
+          <span id="clockS"  class="clock-large">00</span>
+          <span class="clock-cs clock-sep">.</span>
+          <span id="clockCS" class="clock-cs">00</span>
+        </div>
+        <p id="statusLabel" style="color:var(--amber);font-size:.825rem;font-weight:500;margin-top:.75rem;" class="animate-pulse">
+          ⏱ 타이머 작동 중 — 영상 보고 돌아오세요!
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 mt-6 w-full max-w-sm mx-auto">
+        <button id="pauseBtn" class="btn-stop running flex-1 py-3">⏸ 정지</button>
+        <a href="board.html"
+           style="flex:1;padding:.75rem 1rem;border-radius:.75rem;background:var(--accent);color:#ffffff;
+                  font-weight:700;font-size:.875rem;text-align:center;transition:opacity .18s;"
+           class="hover:opacity-85">
+          📸 인증 게시판으로
+        </a>
+      </div>
+      <button id="resetBtn"
+              style="margin-top:1rem;color:var(--dim);font-size:.72rem;background:none;border:none;cursor:pointer;text-decoration:underline;">
+        처음부터 다시
+      </button>
+    </div>
+
+    <!-- ── PHASE 3: RESULT ── -->
+    <div id="phaseResult" class="flex-col items-center text-center max-w-xl w-full py-16 overlay-fade">
+      <div style="font-size:3.5rem;margin-bottom:1rem;" id="resEmoji">😮</div>
+      <p class="section-label">당신이 소비한 시간</p>
+      <div class="clock clock-large mb-1" id="finalTime">00:00</div>
+      <p id="resMsg" style="font-size:1.2rem;font-weight:700;margin:.75rem 0 .5rem;"></p>
+      <p id="resDesc" style="color:var(--muted);font-size:.875rem;line-height:1.7;max-width:26rem;margin-bottom:2rem;"></p>
+
+      <div class="flex flex-col sm:flex-row gap-3 w-full max-w-sm mx-auto">
+        <a href="board.html"
+           style="flex:1;padding:.75rem 1rem;border-radius:.75rem;background:var(--accent);color:#ffffff;
+                  font-weight:700;font-size:.875rem;text-align:center;transition:opacity .18s;"
+           class="hover:opacity-85">
+          📸 인증 게시판에 기록하기
+        </a>
+        <button id="againBtn"
+                style="flex:1;padding:.75rem 1rem;border-radius:.75rem;border:1px solid var(--border);
+                       color:var(--muted);font-size:.875rem;transition:all .18s;cursor:pointer;background:transparent;"
+                onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--muted)'"
+                onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">
+          🔄 다시 실험하기
+        </button>
+      </div>
+      <a href="test.html"
+         style="margin-top:1rem;color:var(--dim);font-size:.72rem;display:block;text-decoration:underline;transition:color .2s;"
+         onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--dim)'">
+        도파민 중독 테스트도 해보기
+      </a>
+    </div>
+
+  </main>
+
+  <script>
+    let startTime = 0, elapsed = 0, raf = null, running = false;
+
+    const phaseReady  = document.getElementById('phaseReady');
+    const phaseGo     = document.getElementById('phaseGo');
+    const phaseResult = document.getElementById('phaseResult');
+    const startBtn    = document.getElementById('startBtn');
+    const pauseBtn    = document.getElementById('pauseBtn');
+    const resetBtn    = document.getElementById('resetBtn');
+    const againBtn    = document.getElementById('againBtn');
+    const statusLabel = document.getElementById('statusLabel');
+
+    function pad(n, d=2) { return String(n).padStart(d, '0'); }
+
+    function updateClock(ms) {
+      const totalSec = Math.floor(ms / 1000);
+      const cs = Math.floor((ms % 1000) / 10);
+      const s  = totalSec % 60;
+      const m  = Math.floor(totalSec / 60) % 60;
+      const h  = Math.floor(totalSec / 3600);
+      document.getElementById('clockCS').textContent = pad(cs);
+      document.getElementById('clockS').textContent  = pad(s);
+      document.getElementById('clockM').textContent  = pad(m);
+      if (h > 0) {
+        document.getElementById('clockH').textContent = pad(h);
+        document.getElementById('clockH').classList.remove('hidden');
+        document.getElementById('colonH').classList.remove('hidden');
+      }
+    }
+
+    function tick() { elapsed = Date.now() - startTime; updateClock(elapsed); raf = requestAnimationFrame(tick); }
+    function startTimer() { startTime = Date.now() - elapsed; running = true; raf = requestAnimationFrame(tick); }
+    function stopTimer()  { running = false; cancelAnimationFrame(raf); }
+
+    function formatTime(ms) {
+      const totalSec = Math.floor(ms / 1000);
+      const s = totalSec % 60, m = Math.floor(totalSec / 60) % 60, h = Math.floor(totalSec / 3600);
+      if (h > 0) return `${pad(h)}:${pad(m)}:${pad(s)}`;
+      return `${pad(m)}:${pad(s)}`;
+    }
+
+    function getResult(ms) {
+      const sec = ms / 1000;
+      if (sec < 60)   return { emoji:'😌', msg:'1분 이내!',    desc:'대단합니다. 의지력이 매우 강하십니다. 처음 선택한 영상 하나만 보고 바로 돌아오셨군요.', color:'var(--accent)' };
+      if (sec < 120)  return { emoji:'🙂', msg:'1분 ~ 2분',   desc:'비교적 양호합니다. 하지만 \'하나만 더 볼까\'라는 마음만 버렸다면 좋았을텐데 아쉽네요...', color:'var(--accent)' };
+      if (sec < 300)  return { emoji:'😐', msg:'5분 이내',     desc:'어느새 5분이 흘렀습니다. 도파민 루프가 이미 시작되고 있었습니다.', color:'var(--amber)' };
+      if (sec < 600)  return { emoji:'😬', msg:'10분 이내',    desc:'10분이 지났습니다. "하나만 봐야지"가 여러 개가 됐을 거예요. 이게 알고리즘이 노리는 것입니다.', color:'var(--amber)' };
+      if (sec < 1800) return { emoji:'😰', msg:'30분 이상!',   desc:'30분 이상이 사라졌습니다. 이것이 반복되면 하루에 수 시간이 증발합니다.', color:'var(--rose)' };
+      return                  { emoji:'🚨', msg:'1시간 이상!!', desc:'1시간 이상이 흘렀습니다. 심각한 도파민 과의존 상태입니다. 지금 당장 디톡스를 시작하세요.', color:'var(--rose)' };
+    }
+
+    startBtn.addEventListener('click', () => {
+      elapsed = 0;
+      phaseReady.style.display = 'none';
+      phaseGo.style.display = 'flex';
+      startTimer();
+    });
+
+    pauseBtn.addEventListener('click', () => {
+      if (running) {
+        stopTimer();
+        pauseBtn.textContent = '▶ 재개';
+        pauseBtn.classList.remove('running');
+        pauseBtn.classList.add('stopped');
+        statusLabel.textContent = '⏸ 정지됨 — 영상 다 보셨나요?';
+        statusLabel.classList.remove('animate-pulse');
+        statusLabel.style.color = 'var(--accent)';
+
+        const res = getResult(elapsed);
+        document.getElementById('finalTime').textContent = formatTime(elapsed);
+        document.getElementById('resEmoji').textContent  = res.emoji;
+        document.getElementById('resMsg').textContent    = res.msg;
+        document.getElementById('resMsg').style.color    = res.color;
+        document.getElementById('resDesc').textContent   = res.desc;
+
+        setTimeout(() => { phaseGo.style.display = 'none'; phaseResult.style.display = 'flex'; }, 600);
+      } else {
+        startTimer();
+        pauseBtn.textContent = '⏸ 정지';
+        pauseBtn.classList.add('running');
+        pauseBtn.classList.remove('stopped');
+        statusLabel.textContent = '⏱ 타이머 작동 중 — 영상 보고 돌아오세요!';
+        statusLabel.classList.add('animate-pulse');
+        statusLabel.style.color = 'var(--amber)';
+      }
+    });
+
+    resetBtn.addEventListener('click', reset);
+    againBtn.addEventListener('click', reset);
+
+    function reset() {
+      stopTimer(); elapsed = 0; running = false; updateClock(0);
+      document.getElementById('clockH').classList.add('hidden');
+      document.getElementById('colonH').classList.add('hidden');
+      pauseBtn.textContent = '⏸ 정지';
+      pauseBtn.classList.add('running');
+      pauseBtn.classList.remove('stopped');
+      statusLabel.textContent = '⏱ 타이머 작동 중 — 영상 보고 돌아오세요!';
+      statusLabel.classList.add('animate-pulse');
+      statusLabel.style.color = 'var(--amber)';
+      phaseResult.style.display = 'none';
+      phaseReady.style.display  = 'none';
+      phaseGo.style.display     = 'flex';
+      startTimer();
+    }
+  </script>
+</body>
+</html>

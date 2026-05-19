@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>도파민 중독 테스트 | Nopamine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg:       #f8f7f5;
+      --surface:  #f0ede9;
+      --card:     #ffffff;
+      --border:   #e0dbd3;
+      --accent:   #3d7a52;
+      --accent-h: #2d6a42;
+      --accent-bg:#edf5f1;
+      --amber:    #9a7530;
+      --rose:     #b85a52;
+      --text:     #1c1a17;
+      --muted:    #7a7168;
+      --dim:      #aaa098;
+    }
+    body { background: var(--bg); color: var(--text); }
+    .logo { color: var(--accent); font-weight: 900; letter-spacing: .12em; }
+
+    .option-btn {
+      display: flex; align-items: center; gap: .75rem; width: 100%; text-align: left;
+      padding: .85rem 1.1rem; background: var(--card); border: 1px solid var(--border);
+      border-radius: .75rem; color: var(--muted); transition: all .18s; cursor: pointer; font-size: .875rem;
+    }
+    .option-btn:hover { border-color: var(--accent); color: var(--text); background: var(--accent-bg); }
+    .option-btn.selected { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); font-weight: 600; }
+    .option-btn .score-badge {
+      flex: none; min-width: 1.5rem; height: 1.5rem; border-radius: 999px;
+      background: var(--surface); font-size: .7rem; font-weight: 700; color: var(--dim);
+      display: flex; align-items: center; justify-content: center; transition: all .18s;
+    }
+    .option-btn.selected .score-badge { background: #c8e8d4; color: var(--accent); }
+
+    .category-tag {
+      display: inline-block; font-size: .65rem; font-weight: 700; letter-spacing: .08em;
+      padding: .2rem .65rem; border-radius: 999px; margin-bottom: .75rem;
+      background: #dff0e7; color: var(--accent);
+    }
+
+    .slide-in  { animation: slideIn .32s ease forwards; }
+    .slide-out { animation: slideOut .22s ease forwards; }
+    @keyframes slideIn  { from{opacity:0;transform:translateX(36px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes slideOut { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(-36px)} }
+
+    .meter-track { background: var(--border); border-radius: 999px; height: 10px; overflow: hidden; }
+    .meter-fill  { height: 100%; border-radius: 999px; transition: width 1.1s ease; }
+
+    .result-card { animation: popIn .45s cubic-bezier(.175,.885,.32,1.275) forwards; }
+    @keyframes popIn { from{opacity:0;transform:scale(.88)} to{opacity:1;transform:scale(1)} }
+
+    .btn-primary {
+      flex: 1; padding: .75rem 1rem; border-radius: .75rem;
+      background: var(--accent); color: #ffffff; font-weight: 700;
+      transition: background .18s; font-size: .875rem; cursor: pointer; border: none;
+    }
+    .btn-primary:hover { background: var(--accent-h); }
+    .btn-primary:disabled { opacity: .3; cursor: not-allowed; }
+
+    .btn-ghost {
+      flex: none; padding: .75rem 1.25rem; border-radius: .75rem;
+      border: 1px solid var(--border); color: var(--muted);
+      transition: all .18s; font-size: .875rem; cursor: pointer; background: transparent;
+    }
+    .btn-ghost:hover { border-color: var(--muted); color: var(--text); }
+    .btn-ghost:disabled { opacity: .25; cursor: not-allowed; }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- NAV -->
+  <nav style="background:rgba(248,247,245,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);"
+       class="fixed top-0 w-full z-50">
+    <div class="max-w-4xl mx-auto px-5 h-14 flex items-center justify-between">
+      <a href="index.html" class="select-none"><img src="logo.png" alt="Nopamine" style="height:38px;width:auto;display:block;"></a>
+      <span style="color:var(--muted);font-size:.8rem;">도파민 중독 테스트</span>
+    </div>
+  </nav>
+
+  <!-- QUIZ CONTAINER -->
+  <main class="flex-1 flex flex-col items-center justify-center px-4 pt-20 pb-10">
+    <div class="w-full max-w-xl">
+
+      <!-- QUIZ SCREEN -->
+      <div id="quizScreen">
+        <!-- Progress -->
+        <div class="mb-8">
+          <div class="flex justify-between mb-2" style="font-size:.75rem;color:var(--muted);">
+            <span id="qLabel">질문 1 / 7</span>
+            <span id="pct">0%</span>
+          </div>
+          <div class="meter-track">
+            <div id="progressBar" class="meter-fill" style="width:0%;background:var(--accent)"></div>
+          </div>
+        </div>
+
+        <!-- Question card -->
+        <div id="questionCard" class="slide-in">
+          <div class="rounded-2xl p-8" style="background:var(--card);border:1px solid var(--border);">
+            <p style="font-size:.7rem;color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem;">질문 <span id="qNum">1</span></p>
+            <h2 id="qText" style="font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:1.5rem;line-height:1.55;"></h2>
+            <div id="options" class="space-y-2.5"></div>
+          </div>
+          <div class="flex gap-3 mt-5">
+            <button id="prevBtn" class="btn-ghost">← 이전</button>
+            <button id="nextBtn" class="btn-primary" disabled>다음 →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULT SCREEN (hidden) -->
+      <div id="resultScreen" class="hidden">
+        <div class="result-card rounded-2xl border p-8 text-center" style="background:var(--card);">
+          <div id="resultEmoji" style="font-size:3.5rem;margin-bottom:1rem;"></div>
+          <p id="resultLevel" style="font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem;"></p>
+          <h2 id="resultTitle" style="font-size:1.4rem;font-weight:900;margin-bottom:.75rem;color:var(--text);"></h2>
+          <p id="resultDesc" style="color:var(--muted);font-size:.875rem;line-height:1.7;margin-bottom:1.75rem;"></p>
+
+          <!-- Score meter -->
+          <div class="mb-2 text-left">
+            <div class="flex justify-between mb-1.5" style="font-size:.72rem;color:var(--muted);">
+              <span>도파민 중독 지수</span>
+              <span id="scoreText" style="font-weight:700;color:var(--text);"></span>
+            </div>
+            <div class="meter-track">
+              <div id="scoreFill" class="meter-fill" style="width:0%"></div>
+            </div>
+          </div>
+          <div class="flex justify-between mb-8" style="font-size:.68rem;color:var(--dim);">
+            <span>안전</span><span>경고</span><span>위험</span>
+          </div>
+
+          <!-- Tips -->
+          <div id="tips" class="text-left rounded-xl p-4 mb-6 space-y-2"
+               style="background:var(--surface);border:1px solid var(--border);font-size:.85rem;color:var(--muted);"></div>
+
+          <!-- CTAs -->
+          <div class="flex flex-col sm:flex-row gap-3">
+            <a href="experiment.html"
+               style="flex:1;padding:.75rem 1rem;border-radius:.75rem;background:var(--amber);color:#ffffff;font-weight:700;font-size:.85rem;text-align:center;transition:opacity .18s;"
+               class="hover:opacity-85">
+              ⏱ 도파민 자극 실험 해보기
+            </a>
+            <a href="board.html"
+               style="flex:1;padding:.75rem 1rem;border-radius:.75rem;border:1px solid var(--border);color:var(--muted);font-size:.85rem;text-align:center;transition:all .18s;"
+               onmouseover="this.style.borderColor='var(--muted)';this.style.color='var(--text)'"
+               onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
+              📸 스크린타임 인증하기
+            </a>
+          </div>
+          <button id="retryBtn"
+                  style="margin-top:1rem;color:var(--dim);font-size:.75rem;background:none;border:none;cursor:pointer;text-decoration:underline;">
+            다시 테스트하기
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    const SCALE = [
+      { text: "전혀 아니다",  score: 1 },
+      { text: "거의 아니다",  score: 2 },
+      { text: "보통이다",     score: 3 },
+      { text: "자주 그렇다",  score: 4 },
+      { text: "매우 그렇다",  score: 5 },
+    ];
+
+    const questions = [
+      { category: "통제력 상실", q: "잠깐만 보려고 앱(유튜브, 인스타그램 등)을 켰다가 1시간 이상 무의식적으로 스크롤한 적이 잦다.", options: SCALE },
+      { category: "내성",        q: "이제는 10분이 넘어가는 영상이나 자극적이지 않은 콘텐츠는 지루해서 넘기게 된다.", options: SCALE },
+      { category: "금단",        q: "스마트폰이 시야에 없거나 배터리가 10% 미만이면 심리적으로 불안하고 초조해진다.", options: SCALE },
+      { category: "일상 장애",   q: "밤에 영상을 보느라 계획한 수면 시간을 넘기고 다음 날 피로를 겪는 일이 반복된다.", options: SCALE },
+      { category: "집중력 저하", q: "세 줄 요약이 없는 긴 글이나 책을 읽을 때 글자가 눈에 들어오지 않고 집중이 깨진다.", options: SCALE },
+      { category: "회피",        q: "스트레스를 받거나 현실의 숙제(업무, 공부)를 피하고 싶을 때 가장 먼저 숏폼 영상부터 찾는다.", options: SCALE },
+      { category: "신체 증상",   q: "눈 초점이 흐려지거나 피로감을 느끼는 등 신체적 이상을 자각하면서도 화면 보는 것을 멈추지 못한다.", options: SCALE },
+    ];
+
+    const results = [
+      {
+        min: 7, max: 14,
+        emoji: "💚", level: "안전 (정상 수준)", color: "#3d7a52", barColor: "#3d7a52", borderColor: "#a0d4b4",
+        title: "스마트폰 사용 통제력 양호",
+        status: "목적이 있을 때만 기기를 사용하는 건강한 패턴입니다.",
+        tips: [
+          "현재 습관을 유지하세요 — 당신은 이미 디지털 디톡스 중입니다",
+          "장시간 사용 시 눈 피로도 관리를 위해 20-20-20 법칙을 실천하세요",
+          "주변 사람들에게도 좋은 영향을 나눠주세요",
+        ]
+      },
+      {
+        min: 15, max: 24,
+        emoji: "💛", level: "경고 (초기 중독 단계)", color: "#9a7530", barColor: "#9a7530", borderColor: "#d0b060",
+        title: "숏폼 내성 발생 중",
+        status: "무의식적인 스크롤 습관과 집중력 저하가 진행 중입니다.",
+        tips: [
+          "의식적인 스크린타임 제한이 필요합니다",
+          "Nopamine '도파민 자극 실험'으로 실제 소비 시간을 직접 확인해 보세요",
+          "스마트폰 앱의 '사용 시간 제한' 기능을 활성화하세요",
+          "잠들기 1시간 전 스크린을 끄는 루틴을 만드세요",
+        ]
+      },
+      {
+        min: 25, max: 35,
+        emoji: "🔴", level: "위험 (중증 도파민 중독)", color: "#b85a52", barColor: "#b85a52", borderColor: "#d08080",
+        title: "즉각적인 디지털 디톡스 필요",
+        status: "통제력 상실 상태. 일상생활 방해 및 가성 근시(눈 초점 상실) 위험이 매우 높습니다.",
+        tips: [
+          "즉각적인 디지털 디톡스가 필수입니다",
+          "Nopamine '인증 게시판'을 통해 사용 시간을 공개 인증하고 스스로를 통제하세요",
+          "숏폼 앱을 삭제하거나 차단 앱을 설치하세요",
+          "강제 오프라인 활동(산책, 독서, 운동)을 하루 루틴에 넣으세요",
+          "반드시 안과 검진을 받아보세요",
+        ]
+      },
+    ];
+
+    let current = 0;
+    const answers = new Array(questions.length).fill(null);
+
+    const qLabel = document.getElementById('qLabel');
+    const qNum   = document.getElementById('qNum');
+    const qText  = document.getElementById('qText');
+    const opts   = document.getElementById('options');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const pBar   = document.getElementById('progressBar');
+    const pct    = document.getElementById('pct');
+
+    function render() {
+      const q = questions[current];
+      qLabel.textContent = `질문 ${current+1} / ${questions.length}`;
+      qNum.textContent   = current+1;
+
+      let catTag = document.getElementById('catTag');
+      if (!catTag) {
+        catTag = document.createElement('div');
+        catTag.id = 'catTag';
+        catTag.className = 'category-tag';
+        qText.parentNode.insertBefore(catTag, qText);
+      }
+      catTag.textContent = q.category;
+      qText.textContent  = q.q;
+
+      opts.innerHTML = '';
+      q.options.forEach((o, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn' + (answers[current] === i ? ' selected' : '');
+        btn.innerHTML = `<span class="score-badge">${o.score}</span>${o.text}`;
+        btn.addEventListener('click', () => selectOption(i));
+        opts.appendChild(btn);
+      });
+
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = answers[current] === null;
+      nextBtn.textContent = current === questions.length - 1 ? '결과 보기 →' : '다음 →';
+
+      const p = Math.round((current / questions.length) * 100);
+      pBar.style.width = p + '%';
+      pct.textContent  = p + '%';
+    }
+
+    function selectOption(i) {
+      answers[current] = i;
+      document.querySelectorAll('.option-btn').forEach((b, idx) => {
+        b.classList.toggle('selected', idx === i);
+      });
+      nextBtn.disabled = false;
+    }
+
+    function animateTransition(dir, cb) {
+      const card = document.getElementById('questionCard');
+      card.style.animation = 'none';
+      card.offsetHeight;
+      card.style.animation = 'slideOut .22s ease forwards';
+      setTimeout(() => { cb(); card.style.animation = 'slideIn .3s ease forwards'; }, 220);
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (current > 0) animateTransition(-1, () => { current--; render(); });
+    });
+    nextBtn.addEventListener('click', () => {
+      if (current < questions.length - 1) {
+        animateTransition(1, () => { current++; render(); });
+      } else {
+        showResult();
+      }
+    });
+
+    function showResult() {
+      const total = answers.reduce((sum, a, i) => sum + (a !== null ? questions[i].options[a].score : 1), 0);
+      const res   = results.find(r => total >= r.min && total <= r.max) || results[results.length - 1];
+      const pct   = Math.min(100, ((total - 7) / (35 - 7)) * 100);
+
+      document.getElementById('quizScreen').classList.add('hidden');
+      const rs = document.getElementById('resultScreen');
+      rs.classList.remove('hidden');
+
+      document.getElementById('resultEmoji').textContent = res.emoji;
+      const lvEl = document.getElementById('resultLevel');
+      lvEl.textContent = res.level;
+      lvEl.style.color = res.color;
+      document.getElementById('resultTitle').textContent = res.title;
+      document.getElementById('resultDesc').textContent  = res.status;
+      document.getElementById('scoreText').textContent   = `${total}점 / 35점`;
+
+      const borderEl = rs.querySelector('.result-card');
+      borderEl.style.borderColor = res.borderColor;
+
+      const fill = document.getElementById('scoreFill');
+      fill.style.background = res.barColor;
+      setTimeout(() => { fill.style.width = pct + '%'; }, 100);
+
+      const tipsEl = document.getElementById('tips');
+      tipsEl.innerHTML = res.tips.map(t =>
+        `<div style="display:flex;gap:.5rem;align-items:flex-start;">
+          <span style="color:var(--accent);flex:none;margin-top:.05rem;">✓</span>
+          <span>${t}</span>
+        </div>`
+      ).join('');
+    }
+
+    document.getElementById('retryBtn').addEventListener('click', () => {
+      answers.fill(null);
+      current = 0;
+      document.getElementById('resultScreen').classList.add('hidden');
+      document.getElementById('quizScreen').classList.remove('hidden');
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
