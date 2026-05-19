@@ -7,21 +7,20 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
-      --bg:       #f8f7f5;
-      --surface:  #f0ede9;
+      --bg:       #ffffff;
+      --surface:  #f9fafb;
       --card:     #ffffff;
-      --border:   #e0dbd3;
+      --border:   #e5e7eb;
       --accent:   #3d7a52;
       --accent-h: #2d6a42;
       --accent-bg:#edf5f1;
-      --amber:    #9a7530;
-      --rose:     #b85a52;
-      --text:     #1c1a17;
-      --muted:    #7a7168;
-      --dim:      #aaa098;
+      --amber:    #d97706;
+      --rose:     #e11d48;
+      --text:     #0f0f0f;
+      --muted:    #6b7280;
+      --dim:      #9ca3af;
     }
     body { background: var(--bg); color: var(--text); }
-    .logo { color: var(--accent); font-weight: 900; letter-spacing: .12em; }
 
     .option-btn {
       display: flex; align-items: center; gap: .75rem; width: 100%; text-align: left;
@@ -74,11 +73,12 @@
 <body class="font-sans antialiased min-h-screen flex flex-col">
 
   <!-- NAV -->
-  <nav style="background:rgba(248,247,245,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);"
-       class="fixed top-0 w-full z-50">
+  <nav style="background:#111111;" class="fixed top-0 w-full z-50">
     <div class="max-w-4xl mx-auto px-5 h-14 flex items-center justify-between">
-      <a href="index.html" class="select-none"><img src="logo.png" alt="Nopamine" style="height:38px;width:auto;display:block;"></a>
-      <span style="color:var(--muted);font-size:.8rem;">도파민 중독 테스트</span>
+      <a href="index.html" class="select-none">
+        <img src="logo.png" alt="Nopamine" style="height:34px;width:auto;display:block;filter:brightness(0) invert(1);">
+      </a>
+      <span style="color:#9ca3af;font-size:.8rem;">도파민 중독 테스트</span>
     </div>
   </nav>
 
@@ -116,7 +116,6 @@
       <!-- RESULT SCREEN (hidden) -->
       <div id="resultScreen" class="hidden">
         <div class="result-card rounded-2xl border p-8 text-center" style="background:var(--card);">
-          <div id="resultEmoji" style="font-size:3.5rem;margin-bottom:1rem;"></div>
           <p id="resultLevel" style="font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem;"></p>
           <h2 id="resultTitle" style="font-size:1.4rem;font-weight:900;margin-bottom:.75rem;color:var(--text);"></h2>
           <p id="resultDesc" style="color:var(--muted);font-size:.875rem;line-height:1.7;margin-bottom:1.75rem;"></p>
@@ -144,13 +143,13 @@
             <a href="experiment.html"
                style="flex:1;padding:.75rem 1rem;border-radius:.75rem;background:var(--amber);color:#ffffff;font-weight:700;font-size:.85rem;text-align:center;transition:opacity .18s;"
                class="hover:opacity-85">
-              ⏱ 도파민 자극 실험 해보기
+              도파민 자극 실험 해보기
             </a>
             <a href="board.html"
                style="flex:1;padding:.75rem 1rem;border-radius:.75rem;border:1px solid var(--border);color:var(--muted);font-size:.85rem;text-align:center;transition:all .18s;"
                onmouseover="this.style.borderColor='var(--muted)';this.style.color='var(--text)'"
                onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
-              📸 스크린타임 인증하기
+              스크린타임 인증하기
             </a>
           </div>
           <button id="retryBtn"
@@ -185,7 +184,7 @@
     const results = [
       {
         min: 7, max: 14,
-        emoji: "💚", level: "안전 (정상 수준)", color: "#3d7a52", barColor: "#3d7a52", borderColor: "#a0d4b4",
+        level: "안전 (정상 수준)", color: "#3d7a52", barColor: "#3d7a52", borderColor: "#a0d4b4",
         title: "스마트폰 사용 통제력 양호",
         status: "목적이 있을 때만 기기를 사용하는 건강한 패턴입니다.",
         tips: [
@@ -196,7 +195,7 @@
       },
       {
         min: 15, max: 24,
-        emoji: "💛", level: "경고 (초기 중독 단계)", color: "#9a7530", barColor: "#9a7530", borderColor: "#d0b060",
+        level: "경고 (초기 중독 단계)", color: "#9a7530", barColor: "#9a7530", borderColor: "#d0b060",
         title: "숏폼 내성 발생 중",
         status: "무의식적인 스크롤 습관과 집중력 저하가 진행 중입니다.",
         tips: [
@@ -208,7 +207,7 @@
       },
       {
         min: 25, max: 35,
-        emoji: "🔴", level: "위험 (중증 도파민 중독)", color: "#b85a52", barColor: "#b85a52", borderColor: "#d08080",
+        level: "위험 (중증 도파민 중독)", color: "#b85a52", barColor: "#b85a52", borderColor: "#d08080",
         title: "즉각적인 디지털 디톡스 필요",
         status: "통제력 상실 상태. 일상생활 방해 및 가성 근시(눈 초점 상실) 위험이 매우 높습니다.",
         tips: [
@@ -302,7 +301,6 @@
       const rs = document.getElementById('resultScreen');
       rs.classList.remove('hidden');
 
-      document.getElementById('resultEmoji').textContent = res.emoji;
       const lvEl = document.getElementById('resultLevel');
       lvEl.textContent = res.level;
       lvEl.style.color = res.color;

@@ -7,262 +7,319 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
-      --bg:       #f8f7f5;
-      --surface:  #f0ede9;
-      --card:     #ffffff;
-      --border:   #e0dbd3;
       --accent:   #3d7a52;
       --accent-h: #2d6a42;
       --accent-bg:#edf5f1;
-      --amber:    #9a7530;
-      --amber-bg: #fdf5e6;
-      --rose:     #b85a52;
-      --rose-bg:  #fdf0ee;
-      --text:     #1c1a17;
-      --muted:    #7a7168;
-      --dim:      #aaa098;
+      --amber:    #d97706;
+      --rose:     #e11d48;
+      --text:     #0f0f0f;
+      --muted:    #6b7280;
+      --dim:      #9ca3af;
+      --border:   #e5e7eb;
     }
     * { box-sizing: border-box; }
-    body { background: var(--bg); color: var(--text); }
+    body { background: #ffffff; color: var(--text); }
 
-    .logo { color: var(--accent); font-weight: 900; letter-spacing: .12em; }
+    /* ── NAV ── */
+    nav { background: #111111; }
+    .nav-link { color: #9ca3af; transition: color .2s; font-size: .875rem; font-weight: 500; }
+    .nav-link:hover { color: #ffffff; }
 
-    .nav-link { color: var(--muted); transition: color .2s; font-size: .875rem; font-weight: 500; }
-    .nav-link:hover { color: var(--text); }
-
+    /* ── HERO ── */
+    .hero-bg {
+      background: linear-gradient(140deg, #eaf5ee 0%, #f0fdf4 45%, #eff6ff 100%);
+    }
     .eye-flicker { animation: eyeFlicker 5s ease-in-out infinite; }
     @keyframes eyeFlicker {
       0%,100%,42%,58% { filter: blur(0); opacity: 1; }
-      50%              { filter: blur(2px); opacity: .55; }
+      50%              { filter: blur(2px); opacity: .45; }
     }
 
-    .card-lift { transition: transform .25s ease, box-shadow .25s ease; }
-    .card-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.1); }
-
+    /* ── BADGES ── */
     .badge-warn {
       display: inline-flex; align-items: center; gap: .5rem;
-      background: var(--rose-bg); border: 1px solid #e0a8a0;
+      background: #fff1f2; border: 1px solid #fecdd3;
       color: var(--rose); font-size: .72rem; font-weight: 600;
       padding: .35rem 1rem; border-radius: 999px;
     }
-    .dot-pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--rose); animation: dotPulse 2s ease infinite; }
+    .dot-pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--rose); animation: dotPulse 2s ease infinite; flex-shrink:0; }
     @keyframes dotPulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
+    /* ── BUTTONS ── */
     .btn-primary {
-      display: inline-flex; align-items: center; gap: .6rem;
+      display: inline-flex; align-items: center; gap: .55rem;
       background: var(--accent); color: #ffffff; font-weight: 700;
-      padding: .9rem 2.2rem; border-radius: 999px; font-size: 1rem;
-      transition: background .2s, transform .15s;
+      padding: .85rem 2rem; border-radius: 999px; font-size: .95rem;
+      transition: background .2s, transform .15s; border: none; cursor: pointer;
     }
     .btn-primary:hover { background: var(--accent-h); transform: translateY(-1px); }
-    .btn-primary:active { transform: translateY(0); }
 
-    .btn-outline {
+    .btn-ghost {
       display: inline-flex; align-items: center; gap: .5rem;
-      border: 1.5px solid var(--accent); color: var(--accent);
-      padding: .75rem 2rem; border-radius: 999px; font-size: .9rem; font-weight: 600;
-      transition: background .2s, color .2s;
+      border: 1.5px solid #d1d5db; color: var(--text);
+      background: #ffffff; padding: .82rem 1.75rem; border-radius: 999px;
+      font-size: .9rem; font-weight: 600; transition: border-color .2s, box-shadow .2s;
+      cursor: pointer;
     }
-    .btn-outline:hover { background: var(--accent-bg); color: var(--accent-h); }
+    .btn-ghost:hover { border-color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,.08); }
 
-    .stat-num { font-size: 3.5rem; font-weight: 900; line-height: 1; letter-spacing: -.02em; }
+    /* ── STAT GLASS CARDS (hero) ── */
+    .stat-glass {
+      background: rgba(255,255,255,.82); border: 1px solid rgba(255,255,255,.9);
+      backdrop-filter: blur(12px); border-radius: 1.5rem;
+    }
 
+    /* ── GRADIENT FEATURE CARDS ── */
+    .feat-card {
+      border-radius: 1.25rem; overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease;
+      display: block; text-decoration: none;
+    }
+    .feat-card:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(0,0,0,.14); }
+    .feat-card-img {
+      height: 155px; display: flex; align-items: center; justify-content: center;
+    }
+    .feat-card-img svg { width: 54px; height: 54px; }
+    .feat-card-body {
+      background: #ffffff; padding: 1.2rem 1.35rem 1.35rem;
+      border: 1px solid var(--border); border-top: none;
+    }
+
+    /* ── DARK CTA SECTION ── */
+    .section-dark { background: #0f0f0f; }
+
+    /* ── SECTION LABEL ── */
     .section-label {
-      font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-      color: var(--accent); margin-bottom: .75rem;
+      font-size: .68rem; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--accent);
     }
-
-    .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
   </style>
 </head>
 <body class="font-sans antialiased">
 
-  <!-- NAV -->
-  <nav style="background:rgba(248,247,245,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);"
-       class="fixed top-0 w-full z-50">
-    <div class="max-w-6xl mx-auto px-5 h-15 flex items-center justify-between" style="height:60px">
-      <a href="index.html" class="select-none"><img src="logo.png" alt="Nopamine" style="height:38px;width:auto;display:block;"></a>
+  <!-- ── NAV ── -->
+  <nav class="fixed top-0 w-full z-50">
+    <div class="max-w-6xl mx-auto px-5 flex items-center justify-between" style="height:60px;">
+      <a href="index.html" class="select-none flex-shrink-0">
+        <img src="logo.png" alt="Nopamine" style="height:34px;width:auto;display:block;filter:brightness(0) invert(1);">
+      </a>
       <div class="hidden md:flex items-center gap-8">
         <a href="test.html"       class="nav-link">도파민 테스트</a>
         <a href="experiment.html" class="nav-link">도파민 자극 실험</a>
         <a href="board.html"      class="nav-link">인증 게시판</a>
-        <span style="color:var(--dim);font-size:.875rem;cursor:not-allowed">노파민 캠프
-          <span style="font-size:.65rem;background:var(--surface);color:var(--dim);padding:.15rem .5rem;border-radius:999px;margin-left:.25rem;">준비중</span>
+        <span style="color:#4b5563;font-size:.875rem;cursor:not-allowed;">노파민 캠프
+          <span style="font-size:.6rem;background:#1f2937;color:#6b7280;padding:.15rem .5rem;border-radius:999px;margin-left:.3rem;">준비중</span>
         </span>
       </div>
-      <button id="mBtn" style="color:var(--muted)" class="md:hidden p-1">
+      <button id="mBtn" style="color:#9ca3af;" class="md:hidden p-2">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
       </button>
     </div>
+    <!-- Mobile menu -->
     <div id="mMenu" class="hidden md:hidden px-5 py-4 space-y-3"
-         style="border-top:1px solid var(--border);background:rgba(248,247,245,.99)">
-      <a href="test.html"       style="color:var(--muted)" class="block text-sm py-1 transition" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">도파민 테스트</a>
-      <a href="experiment.html" style="color:var(--muted)" class="block text-sm py-1 transition" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">도파민 자극 실험</a>
-      <a href="board.html"      style="color:var(--muted)" class="block text-sm py-1 transition" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">인증 게시판</a>
-      <span style="color:var(--dim)" class="block text-sm py-1">노파민 캠프 (준비중)</span>
+         style="border-top:1px solid #1f2937;background:#111111;">
+      <a href="test.html"       style="color:#9ca3af;" class="block text-sm py-1">도파민 테스트</a>
+      <a href="experiment.html" style="color:#9ca3af;" class="block text-sm py-1">도파민 자극 실험</a>
+      <a href="board.html"      style="color:#9ca3af;" class="block text-sm py-1">인증 게시판</a>
+      <span style="color:#4b5563;" class="block text-sm py-1">노파민 캠프 (준비중)</span>
     </div>
   </nav>
 
-  <!-- HERO -->
-  <section style="background:var(--bg);min-height:100vh;" class="flex flex-col items-center justify-center text-center px-5 pt-16 pb-20">
-    <div class="max-w-3xl mx-auto">
+  <!-- ── HERO ── -->
+  <section class="hero-bg overflow-hidden" style="min-height:100vh;padding-top:60px;">
+    <div class="max-w-6xl mx-auto px-5 flex items-center" style="min-height:calc(100vh - 60px);padding-top:3rem;padding-bottom:4rem;">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center w-full">
 
-      <div class="badge-warn mb-10 mx-auto">
-        <span class="dot-pulse"></span>
-        경고 — 당신의 눈이 지금 망가지고 있습니다
-      </div>
-
-      <h1 style="font-size:clamp(2.2rem,6vw,4rem);font-weight:900;line-height:1.15;letter-spacing:-.02em;color:var(--text);"
-          class="mb-7">
-        지금 영상 보면서<br>
-        눈 초점 <span class="eye-flicker" style="color:var(--dim);">풀리신</span> 분들,<br>
-        <span style="color:var(--rose);">당장 멈추세요.</span>
-      </h1>
-
-      <p style="color:var(--muted);font-size:1.05rem;line-height:1.75;max-width:28rem;margin:0 auto 1rem;"
-         class="leading-relaxed">
-        숏폼 중독은 단순한 나쁜 습관이 아닙니다.<br>
-        <strong style="color:var(--text);">도파민 과잉 자극</strong>이 시력을
-        <em style="color:var(--rose);font-style:normal;">실제로</em> 파괴하고 있습니다.
-      </p>
-      <p style="color:var(--dim);font-size:.82rem;" class="mb-12">
-        한국 성인 평균 숏폼 시청 시간
-        <span style="color:var(--amber);font-weight:700;">3시간 12분/일</span>
-        — 당신의 눈은 지금 비명 중입니다.
-      </p>
-
-      <a href="test.html" class="btn-primary">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-        </svg>
-        무료 진단하기 — 1분
-      </a>
-      <p style="color:var(--dim);font-size:.72rem;" class="mt-3">회원가입 불필요 · 완전 무료</p>
-
-      <div style="color:var(--dim);font-size:.72rem;" class="mt-16 flex flex-col items-center gap-1">
-        <span>더 알아보기</span>
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-        </svg>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider">
-
-  <!-- STATS -->
-  <section style="background:var(--surface);padding:6rem 1.25rem;">
-    <div class="max-w-5xl mx-auto">
-      <p class="section-label text-center">숫자로 보는 현실</p>
-      <h2 style="color:var(--text);font-size:1.7rem;font-weight:800;text-align:center;margin-bottom:3rem;letter-spacing:-.01em;">
-        외면하고 싶지만, 당신에게 일어나고 있는 일
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div style="background:var(--card);border:1px solid var(--border);" class="rounded-2xl p-8 text-center">
-          <div class="stat-num" style="color:var(--rose);">87%</div>
-          <div style="color:var(--text);font-weight:600;margin:.75rem 0 .5rem;">숏폼 과의존자 비율</div>
-          <div style="color:var(--muted);font-size:.82rem;line-height:1.6;">스마트폰 사용자 중 하루 2시간 이상 숏폼을 시청하는 비율</div>
+        <!-- Left: copy -->
+        <div>
+          <div class="badge-warn mb-8">
+            <span class="dot-pulse"></span>
+            경고 — 당신의 눈이 지금 망가지고 있습니다
+          </div>
+          <h1 style="font-size:clamp(2.4rem,5.5vw,3.8rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;color:#0f0f0f;"
+              class="mb-6">
+            지금 영상 보면서<br>
+            눈 초점 <span class="eye-flicker" style="color:#c4c0bb;">풀리신</span> 분들,<br>
+            <span style="color:var(--rose);">당장 멈추세요.</span>
+          </h1>
+          <p style="color:var(--muted);font-size:1rem;line-height:1.85;max-width:26rem;" class="mb-8">
+            숏폼 중독은 단순한 나쁜 습관이 아닙니다.<br>
+            <strong style="color:var(--text);">도파민 과잉 자극</strong>이 시력을
+            <em style="color:var(--rose);font-style:normal;">실제로</em> 파괴하고 있습니다.
+          </p>
+          <div class="flex flex-wrap gap-3 mb-5">
+            <a href="test.html" class="btn-primary">
+              무료 진단하기
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5-5 5M6 12h12"/>
+              </svg>
+            </a>
+            <a href="experiment.html" class="btn-ghost">도파민 자극 체험</a>
+          </div>
+          <p style="color:var(--dim);font-size:.72rem;">회원가입 불필요 · 완전 무료</p>
         </div>
-        <div style="background:var(--card);border:1px solid var(--border);" class="rounded-2xl p-8 text-center">
-          <div class="stat-num" style="color:var(--amber);">2.4×</div>
-          <div style="color:var(--text);font-weight:600;margin:.75rem 0 .5rem;">근시 악화 속도</div>
-          <div style="color:var(--muted);font-size:.82rem;line-height:1.6;">숏폼 과시청자의 근시 진행이 일반인 대비 빠른 정도</div>
+
+        <!-- Right: stat glass cards -->
+        <div class="hidden md:flex flex-col gap-4">
+          <div class="stat-glass" style="padding:1.75rem 2rem;">
+            <div style="font-size:3.4rem;font-weight:900;line-height:1;letter-spacing:-.03em;color:var(--rose);">87%</div>
+            <div style="font-weight:700;margin:.5rem 0 .3rem;color:var(--text);font-size:.9rem;">숏폼 과의존자 비율</div>
+            <div style="color:var(--dim);font-size:.78rem;line-height:1.65;">하루 2시간 이상 숏폼을 시청하는 스마트폰 사용자 비율</div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="stat-glass" style="padding:1.5rem;">
+              <div style="font-size:2.6rem;font-weight:900;line-height:1;color:var(--amber);">2.4×</div>
+              <div style="font-size:.8rem;font-weight:700;color:var(--text);margin:.4rem 0 .2rem;">근시 악화 속도</div>
+              <div style="font-size:.72rem;color:var(--dim);">일반인 대비</div>
+            </div>
+            <div class="stat-glass" style="padding:1.5rem;">
+              <div style="font-size:2.6rem;font-weight:900;line-height:1;color:var(--accent);">21일</div>
+              <div style="font-size:.8rem;font-weight:700;color:var(--text);margin:.4rem 0 .2rem;">디톡스 기간</div>
+              <div style="font-size:.72rem;color:var(--dim);">최소 회복까지</div>
+            </div>
+          </div>
+          <div class="stat-glass" style="padding:1rem 1.4rem;display:flex;align-items:center;gap:.6rem;">
+            <div style="width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;animation:dotPulse 2s ease infinite;"></div>
+            <span style="color:var(--muted);font-size:.78rem;">한국 성인 평균 숏폼 시청 시간</span>
+            <span style="color:var(--amber);font-weight:800;font-size:.88rem;margin-left:auto;">3시간 12분/일</span>
+          </div>
         </div>
-        <div style="background:var(--card);border:1px solid var(--border);" class="rounded-2xl p-8 text-center">
-          <div class="stat-num" style="color:var(--accent);">21일</div>
-          <div style="color:var(--text);font-weight:600;margin:.75rem 0 .5rem;">디톡스 소요 기간</div>
-          <div style="color:var(--muted);font-size:.82rem;line-height:1.6;">도파민 수용체가 정상화되기까지 필요한 최소 기간</div>
-        </div>
+
       </div>
     </div>
   </section>
 
-  <hr class="divider">
-
-  <!-- FEATURES -->
-  <section style="background:var(--bg);padding:6rem 1.25rem;">
+  <!-- ── FEATURES ── -->
+  <section style="background:#ffffff;padding:7rem 1.25rem;">
     <div class="max-w-5xl mx-auto">
-      <p class="section-label text-center">Nopamine이 하는 일</p>
-      <h2 style="color:var(--text);font-size:1.7rem;font-weight:800;text-align:center;margin-bottom:3rem;letter-spacing:-.01em;">
+      <p class="section-label text-center mb-3">NOPAMINE TOOLS</p>
+      <h2 style="font-size:clamp(1.6rem,3.5vw,2.2rem);font-weight:900;text-align:center;margin-bottom:.75rem;letter-spacing:-.02em;">
         단계별 디지털 디톡스 가이드
       </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <p style="color:var(--muted);font-size:.9rem;text-align:center;margin-bottom:3rem;">도파민 중독에서 벗어나는 과학적인 3단계 방법</p>
 
-        <a href="test.html" class="card-lift block p-7 rounded-2xl"
-           style="background:var(--card);border:1px solid var(--border);">
-          <div style="width:2.75rem;height:2.75rem;border-radius:.75rem;background:var(--accent-bg);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.25rem;">🧠</div>
-          <h3 style="color:var(--text);font-weight:700;font-size:1rem;margin-bottom:.5rem;">도파민 중독 테스트</h3>
-          <p style="color:var(--muted);font-size:.85rem;line-height:1.65;">7가지 문항으로 당신의 도파민 중독 지수를 측정합니다. 결과에 따른 맞춤형 디톡스 방법을 제안합니다.</p>
-          <div style="color:var(--accent);font-size:.82rem;font-weight:600;margin-top:1.25rem;">테스트 시작 →</div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+        <!-- 도파민 중독 테스트 — 보라 그라데이션 -->
+        <a href="test.html" class="feat-card">
+          <div class="feat-card-img" style="background:linear-gradient(140deg,#a78bfa 0%,#7c3aed 100%);">
+            <svg fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <div class="feat-card-body">
+            <div style="font-size:.62rem;font-weight:700;color:#7c3aed;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.5rem;">테스트</div>
+            <h3 style="font-weight:800;font-size:.88rem;color:var(--text);margin-bottom:.4rem;">도파민 중독 테스트</h3>
+            <p style="color:var(--muted);font-size:.75rem;line-height:1.6;">7가지 문항으로 중독 지수 측정</p>
+            <div style="color:#7c3aed;font-size:.78rem;font-weight:700;margin-top:.9rem;">시작하기 →</div>
+          </div>
         </a>
 
-        <a href="experiment.html" class="card-lift block p-7 rounded-2xl"
-           style="background:var(--card);border:1px solid var(--border);">
-          <div style="width:2.75rem;height:2.75rem;border-radius:.75rem;background:var(--amber-bg);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.25rem;">⏱</div>
-          <h3 style="color:var(--text);font-weight:700;font-size:1rem;margin-bottom:.5rem;">도파민 자극 실험</h3>
-          <p style="color:var(--muted);font-size:.85rem;line-height:1.65;">실제로 영상을 보고 돌아와 소비된 시간을 확인하세요. 충격적인 현실을 체감하는 순간, 변화가 시작됩니다.</p>
-          <div style="color:var(--amber);font-size:.82rem;font-weight:600;margin-top:1.25rem;">실험 시작 →</div>
+        <!-- 도파민 자극 실험 — 주황 그라데이션 -->
+        <a href="experiment.html" class="feat-card">
+          <div class="feat-card-img" style="background:linear-gradient(140deg,#fbbf24 0%,#d97706 100%);">
+            <svg fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div class="feat-card-body">
+            <div style="font-size:.62rem;font-weight:700;color:#d97706;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.5rem;">실험</div>
+            <h3 style="font-weight:800;font-size:.88rem;color:var(--text);margin-bottom:.4rem;">도파민 자극 실험</h3>
+            <p style="color:var(--muted);font-size:.75rem;line-height:1.6;">소비된 시간을 직접 체감</p>
+            <div style="color:#d97706;font-size:.78rem;font-weight:700;margin-top:.9rem;">시작하기 →</div>
+          </div>
         </a>
 
-        <a href="board.html" class="card-lift block p-7 rounded-2xl"
-           style="background:var(--card);border:1px solid var(--border);">
-          <div style="width:2.75rem;height:2.75rem;border-radius:.75rem;background:#e6eff5;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.25rem;">📸</div>
-          <h3 style="color:var(--text);font-weight:700;font-size:1rem;margin-bottom:.5rem;">스크린타임 인증 게시판</h3>
-          <p style="color:var(--muted);font-size:.85rem;line-height:1.65;">나의 스크린타임을 공개 인증하고, 함께 경각심을 높이세요. 혼자보다 함께가 더 강합니다.</p>
-          <div style="color:#5a7a9a;font-size:.82rem;font-weight:600;margin-top:1.25rem;">게시판 보기 →</div>
+        <!-- 스크린타임 인증 게시판 — 파랑 그라데이션 -->
+        <a href="board.html" class="feat-card">
+          <div class="feat-card-img" style="background:linear-gradient(140deg,#60a5fa 0%,#2563eb 100%);">
+            <svg fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <div class="feat-card-body">
+            <div style="font-size:.62rem;font-weight:700;color:#2563eb;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.5rem;">커뮤니티</div>
+            <h3 style="font-weight:800;font-size:.88rem;color:var(--text);margin-bottom:.4rem;">스크린타임 인증 게시판</h3>
+            <p style="color:var(--muted);font-size:.75rem;line-height:1.6;">함께 경각심을 높이세요</p>
+            <div style="color:#2563eb;font-size:.78rem;font-weight:700;margin-top:.9rem;">보러 가기 →</div>
+          </div>
         </a>
 
-        <div class="p-7 rounded-2xl" style="background:var(--card);border:1px solid var(--border);opacity:.45;cursor:not-allowed;">
-          <div style="width:2.75rem;height:2.75rem;border-radius:.75rem;background:#f0edf7;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.25rem;">🏕</div>
-          <h3 style="color:var(--text);font-weight:700;font-size:1rem;margin-bottom:.5rem;">
-            노파민 캠프
-            <span style="font-size:.65rem;background:var(--surface);color:var(--dim);padding:.15rem .55rem;border-radius:999px;margin-left:.4rem;font-weight:600;">준비중</span>
-          </h3>
-          <p style="color:var(--muted);font-size:.85rem;line-height:1.65;">21일 디지털 디톡스 챌린지 프로그램. 전문 코치와 커뮤니티와 함께 완전한 회복을 경험하세요.</p>
-          <div style="color:#8b7ab8;font-size:.82rem;font-weight:600;margin-top:1.25rem;">곧 오픈 예정</div>
+        <!-- 노파민 캠프 — 초록 그라데이션 (비활성) -->
+        <div class="feat-card" style="opacity:.45;cursor:not-allowed;">
+          <div class="feat-card-img" style="background:linear-gradient(140deg,#34d399 0%,#059669 100%);">
+            <svg fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <div class="feat-card-body">
+            <div style="font-size:.62rem;font-weight:700;color:#059669;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.5rem;">챌린지</div>
+            <h3 style="font-weight:800;font-size:.88rem;color:var(--text);margin-bottom:.4rem;">
+              노파민 캠프
+              <span style="font-size:.58rem;background:#f3f4f6;color:#9ca3af;padding:.12rem .45rem;border-radius:999px;margin-left:.3rem;font-weight:600;">준비중</span>
+            </h3>
+            <p style="color:var(--muted);font-size:.75rem;line-height:1.6;">21일 디톡스 챌린지 프로그램</p>
+            <div style="color:#059669;font-size:.78rem;font-weight:700;margin-top:.9rem;">곧 오픈 예정</div>
+          </div>
         </div>
+
       </div>
     </div>
   </section>
 
-  <hr class="divider">
-
-  <!-- QUOTE -->
-  <section style="background:var(--surface);padding:6rem 1.25rem;">
+  <!-- ── DARK CTA ── -->
+  <section class="section-dark" style="padding:8rem 1.25rem;">
     <div class="max-w-2xl mx-auto text-center">
-      <p class="section-label">많은 분들이 이렇게 말합니다</p>
-      <h2 style="color:var(--text);font-size:clamp(1.5rem,4vw,2.2rem);font-weight:900;line-height:1.3;margin-bottom:1.5rem;letter-spacing:-.01em;">
+      <p style="font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6b7280;" class="mb-4">
+        많은 분들이 이렇게 말합니다
+      </p>
+      <h2 style="color:#ffffff;font-size:clamp(1.7rem,4.5vw,2.6rem);font-weight:900;line-height:1.2;margin-bottom:1.5rem;letter-spacing:-.02em;">
         "그냥 잠깐 봤을 뿐인데…"<br>
-        <span style="color:var(--rose);">3시간이 사라졌습니다.</span>
+        <span style="color:#fb7185;">3시간이 사라졌습니다.</span>
       </h2>
-      <p style="color:var(--muted);font-size:1rem;line-height:1.8;margin-bottom:2.5rem;">
+      <p style="color:#9ca3af;font-size:.95rem;line-height:1.9;margin-bottom:2.75rem;">
         도파민 루프는 당신이 의식하지 못하는 사이에 작동합니다.<br>
         숏폼 1개는 15초지만, 뇌는 다음 자극을 끝없이 갈구합니다.<br>
         당신의 눈은 그 과정에서
-        <span style="color:var(--rose);font-weight:600;">조용히, 그리고 확실히 망가집니다.</span>
+        <span style="color:#fb7185;font-weight:600;">조용히, 그리고 확실히 망가집니다.</span>
       </p>
-      <a href="test.html" class="btn-outline">
+      <a href="test.html"
+         style="display:inline-flex;align-items:center;gap:.6rem;background:#ffffff;color:#0f0f0f;
+                font-weight:700;padding:.9rem 2.2rem;border-radius:999px;font-size:.95rem;
+                transition:background .2s,transform .15s;"
+         onmouseover="this.style.background='#f3f4f6';this.style.transform='translateY(-1px)'"
+         onmouseout="this.style.background='#ffffff';this.style.transform='translateY(0)'">
         지금 내 중독 지수 확인하기
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5-5 5M6 12h12"/>
+        </svg>
       </a>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer style="border-top:1px solid var(--border);background:#ece9e4;padding:2.5rem 1.25rem;">
-    <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+  <!-- ── FOOTER ── -->
+  <footer style="background:#111111;border-top:1px solid #1f2937;padding:2.5rem 1.25rem;">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5">
       <div>
-        <img src="logo.png" alt="Nopamine" style="height:32px;width:auto;display:block;margin-bottom:.25rem;">
-        <div style="color:var(--dim);font-size:.72rem;">도파민 중독과 시력 저하로부터 당신의 눈을 지킵니다</div>
+        <img src="logo.png" alt="Nopamine"
+             style="height:28px;width:auto;display:block;filter:brightness(0) invert(1);margin-bottom:.3rem;">
+        <div style="color:#6b7280;font-size:.72rem;">도파민 중독과 시력 저하로부터 당신의 눈을 지킵니다</div>
       </div>
-      <div style="display:flex;gap:1.5rem;">
-        <a href="test.html"       style="color:var(--dim);font-size:.72rem;transition:color .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--dim)'">도파민 테스트</a>
-        <a href="experiment.html" style="color:var(--dim);font-size:.72rem;transition:color .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--dim)'">도파민 자극 실험</a>
-        <a href="board.html"      style="color:var(--dim);font-size:.72rem;transition:color .2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--dim)'">인증 게시판</a>
+      <div style="display:flex;gap:2rem;">
+        <a href="test.html"       style="color:#6b7280;font-size:.75rem;transition:color .2s;"
+           onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#6b7280'">도파민 테스트</a>
+        <a href="experiment.html" style="color:#6b7280;font-size:.75rem;transition:color .2s;"
+           onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#6b7280'">도파민 자극 실험</a>
+        <a href="board.html"      style="color:#6b7280;font-size:.75rem;transition:color .2s;"
+           onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#6b7280'">인증 게시판</a>
       </div>
-      <div style="color:var(--dim);font-size:.72rem;">© 2026 Nopamine. All rights reserved.</div>
+      <div style="color:#4b5563;font-size:.72rem;">© 2026 Nopamine. All rights reserved.</div>
     </div>
   </footer>
 
